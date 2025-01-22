@@ -8,8 +8,7 @@ import { WHALE_THRESHOLD_WEI, explorerUrlAddress, explorerUrlTx } from "./consta
 
 ERC20.Transfer.handler(async ({ event, context }) => {
 
-  // todo: add logic to check if the transfer is a whale transfer > x
-  if (isIndexingAtHead(event.block.timestamp)) {
+  if (isIndexingAtHead(event.block.timestamp) && event.params.value >= BigInt(WHALE_THRESHOLD_WEI)) {
     const ensHandleOrFromAddress = await fetchEnsHandle(event.params.from); 
     const ensHandleOrToAddress = await fetchEnsHandle(event.params.to);
     const msg = `wMonad WHALE ALERT 🐋: A new transfer has been made by <a href="${explorerUrlAddress(

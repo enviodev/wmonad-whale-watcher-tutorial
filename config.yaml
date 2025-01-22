@@ -2,9 +2,9 @@
 name: usdc-whale-watcher
 description: A USDC Whale Watcher indexer that posts notifications to a telegram channel when transfers exceed a threshold
 networks:
-  - id: 20143 # Monad testnet
+  - id: 10143 # Monad testnet
     hypersync_config: 
-      url: https://mosaic-matrix.hypersync.xyz
+      url: https://mosaic-matrix.hypersync.xyz # Once out of stealth this will not be needed
     start_block: 0
     contracts:
       - name: ERC20

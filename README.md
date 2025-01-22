@@ -1,5 +1,9 @@
 ## Envio wMonad Whale Watcher
 
+### Run
+`pnpm i`
+`pnpm envio dev`
+
 ### Setup
 
 `cp .env.example .env`
