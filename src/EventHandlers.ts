@@ -1,43 +1,29 @@
-import { ERC20, Account } from "generated";
+import { ERC20 } from "generated";
+import { isIndexingAtHead, indexBalances } from "./libs/helpers";
+import { fetchEnsHandle } from "./libs/ens";
+import { sendMessageToTelegram } from "./libs/telegram";
+import { weiToEth } from "./libs/eth";
+import { WHALE_THRESHOLD_WEI, explorerUrlAddress, explorerUrlTx } from "./constants";
 
 
 ERC20.Transfer.handler(async ({ event, context }) => {
-  let senderAccount = await context.Account.get(event.params.from.toString());
 
-  if (senderAccount === undefined) {
-    // create the account
-    // This is likely only ever going to be the zero address in the case of the first mint
-    let accountObject: Account = {
-      id: event.params.from.toString(),
-      balance: 0n - event.params.value,
-    };
+  // todo: add logic to check if the transfer is a whale transfer > x
+  if (isIndexingAtHead(event.block.timestamp)) {
+    const ensHandleOrFromAddress = await fetchEnsHandle(event.params.from); 
+    const ensHandleOrToAddress = await fetchEnsHandle(event.params.to);
+    const msg = `wMonad WHALE ALERT 🐋: A new transfer has been made by <a href="${explorerUrlAddress(
+      event.params.from
+    )}">${ensHandleOrFromAddress}</a> to <a href="${explorerUrlAddress(
+      event.params.to
+    )}">${ensHandleOrToAddress}</a> for ${weiToEth(event.params.value)} wMonad! 🔥 - <a href="${explorerUrlTx(
+      event.transaction.hash
+    )}">transaction</a>`;
 
-    context.Account.set(accountObject);
-  } else {
-    // subtract the balance from the existing users balance
-    let accountObject: Account = {
-      id: senderAccount.id,
-      balance: senderAccount.balance - event.params.value,
-    };
-    context.Account.set(accountObject);
+    console.log(msg);
+    await sendMessageToTelegram(msg);
   }
 
-  let receiverAccount = await context.Account.get(event.params.to.toString());
-
-  if (receiverAccount === undefined) {
-    // create new account
-    let accountObject: Account = {
-      id: event.params.to.toString(),
-      balance: event.params.value,
-    };
-    context.Account.set(accountObject);
-  } else {
-    // update existing account
-    let accountObject: Account = {
-      id: receiverAccount.id,
-      balance: receiverAccount.balance + event.params.value,
-    };
-
-    context.Account.set(accountObject);
-  }
+  // This code indexes the balances of the accounts that have sent or received tokens and can be used to query account balances, it is not needed for the notifications
+  await indexBalances(context, event);
 });
