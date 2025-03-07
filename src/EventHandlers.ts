@@ -16,7 +16,7 @@ ERC20.Transfer.handler(async ({ event, context }) => {
     )}">${ensHandleOrFromAddress}</a> to <a href="${explorerUrlAddress(
       event.params.to
     )}">${ensHandleOrToAddress}</a> for ${weiToEth(event.params.value)} wMonad! 🔥 - <a href="${explorerUrlTx(
-      event.transaction.hash
+      "event.transaction.hash"
     )}">transaction</a>`;
 
     console.log(msg);
@@ -24,5 +24,5 @@ ERC20.Transfer.handler(async ({ event, context }) => {
   }
 
   // This code indexes the balances of the accounts that have sent or received tokens and can be used to query account balances, it is not needed for the notifications
-  await indexBalances(context, event);
+  // await indexBalances(context, event);
 });
