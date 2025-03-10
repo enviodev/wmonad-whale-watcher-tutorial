@@ -1,4 +1,4 @@
-## Envio wMonad Whale Watcher
+## Envio WMON Transfers Watcher
 
 ### Run
 `pnpm i`
