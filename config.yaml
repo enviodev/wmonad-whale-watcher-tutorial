@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./node_modules/envio/evm.schema.json
-name: usdc-whale-watcher
-description: A USDC Whale Watcher indexer that posts notifications to a telegram channel when transfers exceed a threshold
+name: wmon-transfers-watcher
+description: A WMON Transfers Watcher indexer that posts notifications to a telegram channel when transfers exceed a threshold
 networks:
   - id: 20143 # Monad testnet
     hypersync_config: 
@@ -8,7 +8,7 @@ networks:
     start_block: 0
     contracts:
       - name: ERC20
-        address: "0x760AfE86e5de5fa0Ee542fc7B7B713e1c5425701" #wMonad
+        address: "0x760AfE86e5de5fa0Ee542fc7B7B713e1c5425701" #WMON
         handler: src/EventHandlers.ts
         events:          
           - event: "Transfer(address indexed from, address indexed to, uint256 value)"
