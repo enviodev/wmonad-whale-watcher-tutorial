@@ -1,22 +1,22 @@
 import { ERC20 } from "generated";
-import { isIndexingAtHead, indexBalances } from "./libs/helpers";
+import { isIndexingAtHead } from "./libs/helpers";
 import { fetchEnsHandle } from "./libs/ens";
 import { sendMessageToTelegram } from "./libs/telegram";
 import { weiToEth } from "./libs/eth";
-import { WHALE_THRESHOLD_WEI, explorerUrlAddress, explorerUrlTx } from "./constants";
+import { THRESHOLD_WEI, explorerUrlAddress, explorerUrlTx } from "./constants";
 
 
 ERC20.Transfer.handler(async ({ event, context }) => {
 
-  if (isIndexingAtHead(event.block.timestamp) && event.params.value >= BigInt(WHALE_THRESHOLD_WEI)) {
+  if (isIndexingAtHead(event.block.timestamp) && event.params.value >= BigInt(THRESHOLD_WEI)) {
     const ensHandleOrFromAddress = await fetchEnsHandle(event.params.from); 
     const ensHandleOrToAddress = await fetchEnsHandle(event.params.to);
-    const msg = `wMonad WHALE ALERT 🐋: A new transfer has been made by <a href="${explorerUrlAddress(
+    const msg = `WMON Transfer ALERT 🐋: A new transfer has been made by <a href="${explorerUrlAddress(
       event.params.from
     )}">${ensHandleOrFromAddress}</a> to <a href="${explorerUrlAddress(
       event.params.to
-    )}">${ensHandleOrToAddress}</a> for ${weiToEth(event.params.value)} wMonad! 🔥 - <a href="${explorerUrlTx(
-      "event.transaction.hash"
+    )}">${ensHandleOrToAddress}</a> for ${weiToEth(event.params.value)} WMON! 🔥 - <a href="${explorerUrlTx(
+      event.transaction.hash
     )}">transaction</a>`;
 
     console.log(msg);
