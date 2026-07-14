@@ -9,5 +9,4 @@ export const explorerUrlAddress = (address: string) =>
 export const explorerUrlTx = (txHash: string) =>
   EXPLORER_URL_MONAD + "tx/" + txHash;
 
-
   

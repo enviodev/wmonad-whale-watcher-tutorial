@@ -32,3 +32,4 @@ cache
 *.bs.js
 generated
 .env
+.envio/

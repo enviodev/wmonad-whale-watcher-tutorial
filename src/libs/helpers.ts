@@ -1,4 +1,4 @@
-import { Account, ERC20_Transfer_event, handlerContext } from "generated";
+import { Account, ERC20_Transfer_event, handlerContext } from "envio";
 
 // used to ensure notifications are only sent while indexing at the head and not historical sync
 const INDEXER_START_TIMESTAMP = Math.floor(new Date().getTime() / 1000);

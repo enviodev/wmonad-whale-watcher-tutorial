@@ -1,12 +1,14 @@
-import { ERC20 } from "generated";
+import { indexer } from "envio";
+
 import { isIndexingAtHead } from "./libs/helpers";
 import { fetchEnsHandle } from "./libs/ens";
 import { sendMessageToTelegram } from "./libs/telegram";
 import { weiToEth } from "./libs/eth";
 import { THRESHOLD_WEI, explorerUrlAddress, explorerUrlTx } from "./constants";
 
-
-ERC20.Transfer.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "ERC20", event: "Transfer" },
+  async ({ event, context }) => {
 
   if (isIndexingAtHead(event.block.timestamp) && event.params.value >= BigInt(THRESHOLD_WEI)) {
     const ensHandleOrFromAddress = await fetchEnsHandle(event.params.from); 
@@ -25,4 +27,5 @@ ERC20.Transfer.handler(async ({ event, context }) => {
 
   // This code indexes the balances of the accounts that have sent or received tokens and can be used to query account balances, it is not needed for the notifications
   // await indexBalances(context, event);
-});
+}
+);
